@@ -50,7 +50,7 @@ void main(List<String> arguments) async {
     'Organizer events',
     'Price value',
     'Price currency',
-    'Free'
+    'Free',
     'Tags',
     'Online',
   ];

@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:dahlia_scraper/scraper/data/models/eventbrite_event_model.dart';
 import 'package:html/parser.dart' as parser;
@@ -60,7 +61,7 @@ final class EventbriteWebScraper extends HttpWebScraper {
     final List<EventEntity> result = [];
 
     while (true) {
-      print("Fetching page $page");
+      stdout.write("\rFetching page $page");
       final ids = await getEventIds(page);
       final res = await getEvents(ids);
       result.addAll(res);

@@ -27,7 +27,7 @@ final class EventbriteEventModel extends EventModel {
     final startTime = "${json['start_date']} ${json['start_time']}";
     final endDate = "${json['end_date']} ${json['end_time']}";
     return EventbriteEventModel(
-      name: json['name'],
+      name: utf8Encode(json['name']),
       startDate: DateTime.parse(startTime),
       endDate: DateTime.parse(endDate),
       description: utf8Encode(json['summary'] as String? ?? ''),
@@ -37,7 +37,7 @@ final class EventbriteEventModel extends EventModel {
 
       organizer: EventOrganizer(
         uid: json['primary_organizer']['id'],
-        name: json['primary_organizer']['name'] ?? '',
+        name: utf8Encode(json['primary_organizer']['name'] ?? ''),
         followers: json['primary_organizer']['num_followers'] ?? 0,
         events: 0
       ),

@@ -9,15 +9,18 @@ final class EventbriteWebScraper extends HttpWebScraper {
 
   EventbriteWebScraper(super.httpClient);
 
-  Future<List<String>> getEventIds(int page) async {
-    const String baseUrl = 'https://www.eventbrite.fr/d/france/all-events/';
+  String _eventsUrl(int page) {
+    return 'https://www.eventbrite.fr/d/france/all-events/?page=$page';
+  }
 
-    Uri getUri() {
-      return Uri.parse("$baseUrl?page=$page");
-    }
+  String _eventsDetailsUrl(List<String> ids) {
+    return "https://www.eventbrite.fr/api/v3/destination/events/?event_ids=${ids.join(',')}&page_size=20&expand=event_sales_status,image,ticket_availability,primary_venue,primary_organizer,";
+  }
+
+  Future<List<String>> getEventIds(int page) async {
 
     final response = await httpClient.get(
-        getUri(),
+        Uri.parse(_eventsUrl(page)),
         headers: {
           "Referer": "https://www.eventbrite.com/d/france/events/",
           "User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36"
@@ -39,13 +42,9 @@ final class EventbriteWebScraper extends HttpWebScraper {
 
   Future<List<EventbriteEventModel>> getEvents(List<String> ids) async {
 
-    Uri getUri() {
-      return Uri.parse(
-        "https://www.eventbrite.fr/api/v3/destination/events/?event_ids=${ids.join(',')}&page_size=20&expand=event_sales_status,image,primary_venue,primary_organizer,"
-      );
-    }
-
-    final res = await httpClient.get(getUri());
+    final res = await httpClient.get(
+      Uri.parse(_eventsDetailsUrl(ids))
+    );
 
     final json = jsonDecode(res.body) as Map<String, dynamic>;
 

@@ -1,5 +1,7 @@
 import 'package:dahlia_scraper/core/business_objects/address.dart';
+import 'package:dahlia_scraper/core/business_objects/event_organizer.dart';
 import 'package:dahlia_scraper/core/business_objects/location.dart';
+import 'package:dahlia_scraper/core/business_objects/price.dart';
 import 'package:dahlia_scraper/core/utils/utf8_encode.dart';
 import 'package:dahlia_scraper/core/value_objects/url.dart';
 import 'package:dahlia_scraper/scraper/data/models/event_model.dart';
@@ -12,6 +14,9 @@ final class EventbriteEventModel extends EventModel {
     required super.endDate,
     required super.description,
     required super.image,
+    required super.organizer,
+    required super.price,
+    required super.isFree,
     required super.tags,
     required super.location,
     required super.url,
@@ -29,6 +34,18 @@ final class EventbriteEventModel extends EventModel {
       image: json['image'] == null
         ? null
         : Url(json['image']['url']),
+
+      organizer: EventOrganizer(
+        uid: json['primary_organizer']['id'],
+        name: json['primary_organizer']['name'] ?? '',
+        followers: json['primary_organizer']['num_followers'] ?? 0,
+        events: 0
+      ),
+      price: Price(
+        value: json['ticket_availability']['minimum_ticket_price']?['value'] ?? 0,
+        currency: json['ticket_availability']['minimum_ticket_price']?['currency'] ?? ''
+      ),
+      isFree: json['ticket_availability']['is_free'],
       tags: (json['tags'] as List<dynamic>)
         .map<String>((e) => utf8Encode(e['display_name'] as String))
         .toList(),
@@ -62,6 +79,13 @@ final class EventbriteEventModel extends EventModel {
       startDate.toIso8601String(),
       endDate.toIso8601String(),
       image?.value ?? '',
+      organizer.uid,
+      organizer.name,
+      organizer.followers.toString(),
+      organizer.events.toString(),
+      price?.value.toString() ?? '',
+      price?.currency ?? '',
+      isFree.toString(),
       tags.join(","),
       isOnline.toString(),
     ];
@@ -74,9 +98,9 @@ final class EventbriteEventModel extends EventModel {
     endDate,
     description,
     image,
-    tags,
-    location,
-    url,
+    organizer,
+    price,
+    isFree,
   ];
 
 }

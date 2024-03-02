@@ -44,8 +44,15 @@ void main(List<String> arguments) async {
     'Start',
     'End',
     'Image',
+    'Organizer ID',
+    'Organizer Name',
+    'Organizer followers',
+    'Organizer events',
+    'Price value',
+    'Price currency',
+    'Free'
     'Tags',
-    'Online event',
+    'Online',
   ];
 
   print("writing csv file...");

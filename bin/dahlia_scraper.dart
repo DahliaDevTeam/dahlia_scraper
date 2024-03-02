@@ -3,6 +3,7 @@ import 'dart:io';
 
 import 'package:dahlia_scraper/csv/csv_service.dart';
 import 'package:dahlia_scraper/scraper/data/factory/eventbrite_web_scraper.dart';
+import 'package:dahlia_scraper/scraper/data/factory/fever_web_scraper.dart';
 import 'package:dahlia_scraper/scraper/domain/enums/scraped_sites_enum.dart';
 import 'package:dahlia_scraper/scraper/domain/factory/web_scraper_factory.dart';
 import 'package:http/http.dart';
@@ -11,7 +12,8 @@ void main(List<String> arguments) async {
   final csvService = CsvService();
   final client = Client();
   final factory = ScraperFactory()
-    ..register(site: ScrapedSite.eventbrite, scraper: EventbriteWebScraper(client));
+    ..register(site: ScrapedSite.eventbrite, scraper: EventbriteWebScraper(client))
+    ..register(site: ScrapedSite.fever, scraper: FeverWebScraper(client));
 
   print("Choose your events provider");
   print(ScrapedSite.values.map((e) => "- ${e.name}"));

@@ -42,7 +42,7 @@ final class EventbriteEventModel extends EventModel {
         events: 0
       ),
       price: Price(
-        value: json['ticket_availability']['minimum_ticket_price']?['value'] ?? 0,
+        value: (json['ticket_availability']['minimum_ticket_price']?['value'] as num?)?.toDouble() ?? 0,
         currency: json['ticket_availability']['minimum_ticket_price']?['currency'] ?? ''
       ),
       isFree: json['ticket_availability']['is_free'],

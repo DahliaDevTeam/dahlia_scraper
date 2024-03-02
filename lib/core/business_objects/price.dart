@@ -2,7 +2,7 @@ import 'package:equatable/equatable.dart';
 
 final class Price extends Equatable {
 
-  final int value;
+  final double value;
   final String currency;
 
   const Price({
